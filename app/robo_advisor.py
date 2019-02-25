@@ -1,5 +1,6 @@
 #from dotenv import load_dotenv
 import json
+import csv
 import os
 import requests
 
@@ -59,6 +60,12 @@ recent_high = max(high_prices)
 recent_low = min(low_prices)
 
 
+csv_file_path = os.path.join(os.path.dirname(__file__, "..", "data", "prices.csv")
+
+with open(csv_file_path, "w") as csv_file:
+    writer = csv.DictWriter(csv_file, fieldnames=)
+    writer.writeheader()
+
 #
 # INFO OUTPUTS
 #
@@ -78,3 +85,5 @@ print("-----------------")
 print("RECOMMENDATION: Buy!")
 print("RECOMMENDATION REASON: Because the latest closing price is within threshold XYZ etc., etc. and this fits within your risk tolerance etc., etc.")
 print("-----------------")
+print("Writing data to CSV")
+
