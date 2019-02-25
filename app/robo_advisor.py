@@ -38,7 +38,9 @@ symbol = "NFLX" # TODO: capture user input, like... input("Please specify a stoc
 # TODO: further parse the JSON response...
 
 # TODO: traverse the nested response data structure to find the latest closing price and other values of interest...
-latest_price_usd = parsed_response["Time Series (Daily)"]["2019-02-20"]["4. close"]
+latest_day = "2019-02-20"
+
+latest_price_usd = parsed_response["Time Series (Daily)"][latest_day]["4. close"]
 
 #
 # INFO OUTPUTS
