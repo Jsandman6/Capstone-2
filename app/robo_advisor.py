@@ -1,17 +1,26 @@
 #from dotenv import load_dotenv
-#import json
-#import os
+import json
+import os
 import requests
 
-request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=MSFT&apik"
+def to_usd(price):
+    return "${0:,.2f}".format(price)
+
+request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=MSFT&apikey=ALPHAVANTAGE_API_KEY"
 response = requests.get(request_url)
-print(type(response))
-print(response.status_code)
-print(response.text)
 
-exit()
 
-load_dotenv() # loads environment variables set in a ".env" file, including the value of the ALPHAVANTAGE_API_KEY variable
+
+#print(type(response))
+#print(response.status_code)
+#print(response.text)
+
+parsed_response = json.loads(response.text)
+
+last_refreshed = parsed_response["Meta Data"]["3. Last Refreshed"]
+
+
+#load_dotenv() # loads environment variables set in a ".env" file, including the value of the ALPHAVANTAGE_API_KEY variable
 
 # see: https://www.alphavantage.co/support/#api-key
 api_key = os.environ.get("ALPHAVANTAGE_API_KEY")
@@ -29,7 +38,7 @@ symbol = "NFLX" # TODO: capture user input, like... input("Please specify a stoc
 # TODO: further parse the JSON response...
 
 # TODO: traverse the nested response data structure to find the latest closing price and other values of interest...
-latest_price_usd = "$100,000.00"
+latest_price_usd = parsed_response["Time Series (Daily)"]["2019-02-20"]["4. close"]
 
 #
 # INFO OUTPUTS
@@ -42,8 +51,8 @@ print("-----------------")
 print(f"STOCK SYMBOL: {symbol}")
 print("RUN AT: 11:52pm on June 5th, 2018")
 print("-----------------")
-print("LATEST DAY OF AVAILABLE DATA: June 4th, 2018")
-print(f"LATEST DAILY CLOSING PRICE: {latest_price_usd}")
+print(f"LATEST DAY OF AVAILABLE DATA: {last_refreshed}")
+print(f"LATEST DAILY CLOSING PRICE: {to_usd(float(latest_price_usd))}")
 print("RECENT HIGH: $101,000.00")
 print("RECENT LOW: $99,000.00")
 print("-----------------")
