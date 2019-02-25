@@ -3,6 +3,14 @@ import json
 import os
 import requests
 
+request_url = "_____________"
+response = requests.get(request_url)
+print(type(response))
+print(response.status_code)
+print(response.text)
+
+exit()
+
 load_dotenv() # loads environment variables set in a ".env" file, including the value of the ALPHAVANTAGE_API_KEY variable
 
 # see: https://www.alphavantage.co/support/#api-key
@@ -10,6 +18,8 @@ api_key = os.environ.get("ALPHAVANTAGE_API_KEY")
 #print("API KEY: " + api_key)
 
 symbol = "NFLX" # TODO: capture user input, like... input("Please specify a stock symbol: ")
+
+
 
 # see: https://www.alphavantage.co/documentation/#daily (or a different endpoint, as desired)
 # TODO: assemble the request url to get daily data for the given stock symbol...
