@@ -5,10 +5,13 @@ import os
 import requests
 import datetime
 
+#adapted from https://github.com/ryanbeaudet/Exec-Dashboard-Project/blob/master/monthly_sales.py
 def to_usd(price):
     return "${0:,.2f}".format(price)
+
 load_dotenv() # loads environment variables set in a ".env" file, including the value of the ALPHAVANTAGE_API_KEY variable
 api_key = os.environ.get("ALPHAVANTAGE_API_KEY")
+
 
 query = input("What is the ticker (i.e. MSFT) of the equity you would like information about? (Enter 'Done' if you're finished querying): ")
 
@@ -22,25 +25,16 @@ while (query != 'Done'):
         print("Sorry! Tickers do not contains digits. Please try again!")
         exit()
 
-
+    #adapted from the screencast
     request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + str(query) + "&apikey=api_key"
     response = requests.get(request_url)
-
-    
-
-
-
-    #print(type(response))
-    #print(response.status_code)
-    #print(response.text)
-
     parsed_response = json.loads(response.text)
 
     #adapted from https://stackoverflow.com/questions/44012811/python-requests-quickly-know-if-response-is-json-parsable
+    #I also used knowledge from other CS courses to implement an exception
     try:
         last_refreshed = parsed_response["Meta Data"]["3. Last Refreshed"]
     except KeyError:
-        print("no good")
         print("Sorry! This ticker could not be found. Please try again!")
         exit()
 
@@ -52,34 +46,25 @@ while (query != 'Done'):
     #print("API KEY: " + api_key)
 
     
-
-
-
-    # see: https://www.alphavantage.co/documentation/#daily (or a different endpoint, as desired)
-    # TODO: assemble the request url to get daily data for the given stock symbol...
-
-    # TODO: use the "requests" package to issue a "GET" request to the specified url, and store the JSON response in a variable...
-
-    # TODO: further parse the JSON response...
-
-    # TODO: traverse the nested response data structure to find the latest closing price and other values of interest...
     tsd = parsed_response["Time Series (Daily)"]
 
     dates = list(tsd.keys()) # TODO: sort to ensure it's ordered
 
-    dates.sort(key=lambda date: datetime.strptime(date, "%d-%b-%y"))
+    #adapted from https://stackoverflow.com/questions/17627531/sort-list-of-date-strings
+    sorted(dates, key=lambda date: datetime.datetime.strptime(date, '%Y-%m-%d'))
 
     
 
     latest_day = dates[0]
-    print(latest_day)
-    exit()
+    
+    
 
     latest_price_usd = tsd[latest_day]["4. close"]
 
     high_prices = []
     low_prices = []
 
+    #high prices adapted from screencast but I did low prices on my own
     for date in dates:
         high_price = tsd[date]["2. high"]
         high_prices.append(float(high_price))
@@ -90,12 +75,18 @@ while (query != 'Done'):
     recent_low = min(low_prices)
 
 
+
+    #adapted from screencast
     csv_file_path = os.path.join(os.path.dirname(__file__), "..", "data", str(query) + " prices.csv")
 
     csv_headers = ["timestamp", "open", "high", "low", "close", "volume"]
+
+    #adapted from https://realpython.com/python-csv/
     with open(csv_file_path, "w") as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=csv_headers)
         writer.writeheader()
+
+        #adapted from screencast
         for date in dates:
             daily_prices = tsd[date]
             writer.writerow({
@@ -113,7 +104,9 @@ while (query != 'Done'):
 
     #adapted on my own from my understanding of value investing
     #stock prices often dip below their intrinsic value due to volatile variations in market sentiment
-    benchmark = recent_low * 1.1
+    #the code itself is my own adaptation
+    benchmark_factor = 1.1
+    benchmark = recent_low * benchmark_factor
     recommendation = ""
     justification = ""
     if (float(latest_price_usd) < benchmark):
@@ -124,12 +117,12 @@ while (query != 'Done'):
         justification = "The stock price is relatively high and there's no reason to think it's undervalued."
     
 
-    # TODO: write response data to a CSV file
-
-    # TODO: further revise the example outputs below to reflect real information
+    
+    #most of this is adapted from the screencast
+    print("")
     print("-----------------")
     print(f"STOCK SYMBOL: {query}")
-    #adapted from shopping cart project
+    #adapted from https://github.com/ryanbeaudet/shopping-cart/blob/master/shopping_cart.py
     d = datetime.datetime.now()
     print("RUN AT:" + str(d.year) + "-" + str(d.month) + "-" + str(d.day) + " " + str(d.hour) + ":" + str(d.minute) + ":" + str(d.second))
     print("-----------------")
@@ -138,11 +131,12 @@ while (query != 'Done'):
     print(f"RECENT HIGH: {to_usd(recent_high)}")
     print(f"RECENT LOW: {to_usd(recent_low)}")
     print("-----------------")
+    #I did this part on my own
     print(f"RECOMMENDATION: {recommendation}")
     print(f"RECOMMENDATION REASON: {justification}")
     print("-----------------")
-    print("Writing data to CSV\n")
-    
+    print("Writing data to CSV")
+    print("-----------------\n")
 
     query = input("What is the ticker (i.e. MSFT) of the equity you would like information about? (Enter 'Done' if you're finished querying): ")
 
