@@ -1,3 +1,4 @@
+#robo_advisor.py
 from dotenv import load_dotenv
 import json
 import csv
@@ -9,15 +10,19 @@ import datetime
 def to_usd(price):
     return "${0:,.2f}".format(price)
 
+
 load_dotenv() # loads environment variables set in a ".env" file, including the value of the ALPHAVANTAGE_API_KEY variable
+
+#adapted from screencast
 api_key = os.environ.get("ALPHAVANTAGE_API_KEY")
 
-
+#adapted from https://github.com/ryanbeaudet/shopping-cart/blob/master/shopping_cart.py
 query = input("What is the ticker (i.e. MSFT) of the equity you would like information about? (Enter 'Done' if you're finished querying): ")
 
+#while loop was my own idea
 while (query != 'Done'):
     #adapted from https://stackoverflow.com/questions/7141208/python-simple-if-or-logic-statement
-    if not (0 < len(query) < 6):
+    if not (0 < len(query) < 7):
         print("Sorry! That ticker is invalid. Please try again!")
         exit()
     #adapted from https://stackoverflow.com/questions/19859282/check-if-a-string-contains-a-number
@@ -111,10 +116,10 @@ while (query != 'Done'):
     justification = ""
     if (float(latest_price_usd) < benchmark):
         recommendation = "Buy"
-        justification = "The stock price is near its recent low and is likely undervalued."
+        justification = "The stock price is near its recent low and is likely undervalued. This means that risk adjusted returns will likely be higher."
     elif (float(latest_price_usd) > benchmark):
         recommendation = "Don't buy"
-        justification = "The stock price is relatively high and there's no reason to think it's undervalued."
+        justification = "The stock price is relatively high and there's no reason to think it's undervalued. Risk adjusted returns are unlikely to be high."
     
 
     
