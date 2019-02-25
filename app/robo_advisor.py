@@ -8,7 +8,10 @@ def to_usd(price):
     return "${0:,.2f}".format(price)
 load_dotenv() # loads environment variables set in a ".env" file, including the value of the ALPHAVANTAGE_API_KEY variable
 api_key = os.environ.get("ALPHAVANTAGE_API_KEY")
-request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=MSFT&apikey=api_key"
+
+query = input("What is the ticker (i.e. MSFT) of the equity you would like information about?")
+
+request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + str(query) + "&apikey=api_key"
 response = requests.get(request_url)
 
 
