@@ -1,4 +1,4 @@
-#from dotenv import load_dotenv
+from dotenv import load_dotenv
 import json
 import csv
 import os
@@ -6,8 +6,9 @@ import requests
 
 def to_usd(price):
     return "${0:,.2f}".format(price)
-
-request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=MSFT&apikey=ALPHAVANTAGE_API_KEY"
+load_dotenv() # loads environment variables set in a ".env" file, including the value of the ALPHAVANTAGE_API_KEY variable
+api_key = os.environ.get("ALPHAVANTAGE_API_KEY")
+request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=MSFT&apikey=api_key"
 response = requests.get(request_url)
 
 
@@ -21,7 +22,7 @@ parsed_response = json.loads(response.text)
 last_refreshed = parsed_response["Meta Data"]["3. Last Refreshed"]
 
 
-#load_dotenv() # loads environment variables set in a ".env" file, including the value of the ALPHAVANTAGE_API_KEY variable
+
 
 # see: https://www.alphavantage.co/support/#api-key
 api_key = os.environ.get("ALPHAVANTAGE_API_KEY")
