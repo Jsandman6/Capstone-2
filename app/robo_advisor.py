@@ -1,9 +1,9 @@
-from dotenv import load_dotenv
-import json
-import os
+#from dotenv import load_dotenv
+#import json
+#import os
 import requests
 
-request_url = "_____________"
+request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=MSFT&apik"
 response = requests.get(request_url)
 print(type(response))
 print(response.status_code)

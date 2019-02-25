@@ -6,4 +6,4 @@
 *
 
 # ... except this gitignore file
-!.gitignore
+.env
