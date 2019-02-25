@@ -22,6 +22,7 @@ while (query != 'Done'):
         print("Sorry! Tickers do not contains digits. Please try again!")
         exit()
 
+
     request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + str(query) + "&apikey=api_key"
     response = requests.get(request_url)
 
@@ -66,7 +67,13 @@ while (query != 'Done'):
 
     dates = list(tsd.keys()) # TODO: sort to ensure it's ordered
 
+    dates.sort(key=lambda date: datetime.strptime(date, "%d-%b-%y"))
+
+    
+
     latest_day = dates[0]
+    print(latest_day)
+    exit()
 
     latest_price_usd = tsd[latest_day]["4. close"]
 
@@ -104,7 +111,8 @@ while (query != 'Done'):
     # INFO OUTPUTS
     #
 
-    
+    #adapted on my own from my understanding of value investing
+    #stock prices often dip below their intrinsic value due to volatile variations in market sentiment
     benchmark = recent_low * 1.1
     recommendation = ""
     justification = ""
@@ -112,7 +120,7 @@ while (query != 'Done'):
         recommendation = "Buy"
         justification = "The stock price is near its recent low and is likely undervalued."
     elif (float(latest_price_usd) > benchmark):
-        recommendation = "Sell"
+        recommendation = "Don't buy"
         justification = "The stock price is relatively high and there's no reason to think it's undervalued."
     
 
