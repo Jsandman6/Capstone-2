@@ -104,6 +104,18 @@ while (query != 'Done'):
     # INFO OUTPUTS
     #
 
+    
+    benchmark = recent_low * 1.1
+    recommendation = ""
+    justification = ""
+    if (float(latest_price_usd) < benchmark):
+        recommendation = "Buy"
+        justification = "The stock price is near its recent low and is likely undervalued."
+    elif (float(latest_price_usd) > benchmark):
+        recommendation = "Sell"
+        justification = "The stock price is relatively high and there's no reason to think it's undervalued."
+    
+
     # TODO: write response data to a CSV file
 
     # TODO: further revise the example outputs below to reflect real information
@@ -118,10 +130,11 @@ while (query != 'Done'):
     print(f"RECENT HIGH: {to_usd(recent_high)}")
     print(f"RECENT LOW: {to_usd(recent_low)}")
     print("-----------------")
-    print("RECOMMENDATION: Buy!")
-    print("RECOMMENDATION REASON: Because the latest closing price is within threshold XYZ etc., etc. and this fits within your risk tolerance etc., etc.")
+    print(f"RECOMMENDATION: {recommendation}")
+    print(f"RECOMMENDATION REASON: {justification}")
     print("-----------------")
-    print("Writing data to CSV")
+    print("Writing data to CSV\n")
+    
 
     query = input("What is the ticker (i.e. MSFT) of the equity you would like information about? (Enter 'Done' if you're finished querying): ")
 
