@@ -22,6 +22,8 @@ while (query != 'Done'):
     request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + str(query) + "&apikey=api_key"
     response = requests.get(request_url)
 
+    
+
 
 
     #print(type(response))
@@ -30,7 +32,12 @@ while (query != 'Done'):
 
     parsed_response = json.loads(response.text)
 
-    last_refreshed = parsed_response["Meta Data"]["3. Last Refreshed"]
+    try:
+        last_refreshed = parsed_response["Meta Data"]["3. Last Refreshed"]
+    except KeyError:
+        print("no good")
+        print("Sorry! This ticker could not be found. Please try again!")
+        exit()
 
 
 
