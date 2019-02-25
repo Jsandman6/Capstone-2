@@ -3,6 +3,7 @@ import json
 import csv
 import os
 import requests
+import datetime
 
 def to_usd(price):
     return "${0:,.2f}".format(price)
@@ -12,9 +13,11 @@ api_key = os.environ.get("ALPHAVANTAGE_API_KEY")
 query = input("What is the ticker (i.e. MSFT) of the equity you would like information about? (Enter 'Done' if you're finished querying): ")
 
 while (query != 'Done'):
+    #adapted from https://stackoverflow.com/questions/7141208/python-simple-if-or-logic-statement
     if not (0 < len(query) < 6):
         print("Sorry! That ticker is invalid. Please try again!")
         exit()
+    #adapted from https://stackoverflow.com/questions/19859282/check-if-a-string-contains-a-number
     elif any(q.isdigit() for q in query):
         print("Sorry! Tickers do not contains digits. Please try again!")
         exit()
@@ -32,6 +35,7 @@ while (query != 'Done'):
 
     parsed_response = json.loads(response.text)
 
+    #adapted from https://stackoverflow.com/questions/44012811/python-requests-quickly-know-if-response-is-json-parsable
     try:
         last_refreshed = parsed_response["Meta Data"]["3. Last Refreshed"]
     except KeyError:
@@ -46,7 +50,7 @@ while (query != 'Done'):
     api_key = os.environ.get("ALPHAVANTAGE_API_KEY")
     #print("API KEY: " + api_key)
 
-    symbol = "NFLX" # TODO: capture user input, like... input("Please specify a stock symbol: ")
+    
 
 
 
@@ -79,7 +83,7 @@ while (query != 'Done'):
     recent_low = min(low_prices)
 
 
-    csv_file_path = os.path.join(os.path.dirname(__file__), "..", "data", "prices.csv")
+    csv_file_path = os.path.join(os.path.dirname(__file__), "..", "data", str(query) + " prices.csv")
 
     csv_headers = ["timestamp", "open", "high", "low", "close", "volume"]
     with open(csv_file_path, "w") as csv_file:
@@ -104,8 +108,10 @@ while (query != 'Done'):
 
     # TODO: further revise the example outputs below to reflect real information
     print("-----------------")
-    print(f"STOCK SYMBOL: {symbol}")
-    print("RUN AT: 11:52pm on June 5th, 2018")
+    print(f"STOCK SYMBOL: {query}")
+    #adapted from shopping cart project
+    d = datetime.datetime.now()
+    print("RUN AT:" + str(d.year) + "-" + str(d.month) + "-" + str(d.day) + " " + str(d.hour) + ":" + str(d.minute) + ":" + str(d.second))
     print("-----------------")
     print(f"LATEST DAY OF AVAILABLE DATA: {last_refreshed}")
     print(f"LATEST DAILY CLOSING PRICE: {to_usd(float(latest_price_usd))}")
