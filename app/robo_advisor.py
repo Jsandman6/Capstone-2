@@ -9,96 +9,106 @@ def to_usd(price):
 load_dotenv() # loads environment variables set in a ".env" file, including the value of the ALPHAVANTAGE_API_KEY variable
 api_key = os.environ.get("ALPHAVANTAGE_API_KEY")
 
-query = input("What is the ticker (i.e. MSFT) of the equity you would like information about?")
+query = input("What is the ticker (i.e. MSFT) of the equity you would like information about? (Enter 'Done' if you're finished querying): ")
 
-request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + str(query) + "&apikey=api_key"
-response = requests.get(request_url)
+while (query != 'Done'):
+    if not (0 < len(query) < 6):
+        print("Sorry! That ticker is invalid. Please try again!")
+        exit()
+    elif any(q.isdigit() for q in query):
+        print("Sorry! Tickers do not contains digits. Please try again!")
+        exit()
 
-
-
-#print(type(response))
-#print(response.status_code)
-#print(response.text)
-
-parsed_response = json.loads(response.text)
-
-last_refreshed = parsed_response["Meta Data"]["3. Last Refreshed"]
+    request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + str(query) + "&apikey=api_key"
+    response = requests.get(request_url)
 
 
 
+    #print(type(response))
+    #print(response.status_code)
+    #print(response.text)
 
-# see: https://www.alphavantage.co/support/#api-key
-api_key = os.environ.get("ALPHAVANTAGE_API_KEY")
-#print("API KEY: " + api_key)
+    parsed_response = json.loads(response.text)
 
-symbol = "NFLX" # TODO: capture user input, like... input("Please specify a stock symbol: ")
-
-
-
-# see: https://www.alphavantage.co/documentation/#daily (or a different endpoint, as desired)
-# TODO: assemble the request url to get daily data for the given stock symbol...
-
-# TODO: use the "requests" package to issue a "GET" request to the specified url, and store the JSON response in a variable...
-
-# TODO: further parse the JSON response...
-
-# TODO: traverse the nested response data structure to find the latest closing price and other values of interest...
-tsd = parsed_response["Time Series (Daily)"]
-
-dates = list(tsd.keys()) # TODO: sort to ensure it's ordered
-
-latest_day = dates[0]
-
-latest_price_usd = tsd[latest_day]["4. close"]
-
-high_prices = []
-low_prices = []
-
-for date in dates:
-    high_price = tsd[date]["2. high"]
-    high_prices.append(float(high_price))
-    low_price = tsd[date]["3. low"]
-    low_prices.append(float(low_price))
-
-recent_high = max(high_prices)
-recent_low = min(low_prices)
+    last_refreshed = parsed_response["Meta Data"]["3. Last Refreshed"]
 
 
-csv_file_path = os.path.join(os.path.dirname(__file__), "..", "data", "prices.csv")
 
-csv_headers = ["timestamp", "open", "high", "low", "close", "volume"]
-with open(csv_file_path, "w") as csv_file:
-    writer = csv.DictWriter(csv_file, fieldnames=csv_headers)
-    writer.writeheader()
+
+    # see: https://www.alphavantage.co/support/#api-key
+    api_key = os.environ.get("ALPHAVANTAGE_API_KEY")
+    #print("API KEY: " + api_key)
+
+    symbol = "NFLX" # TODO: capture user input, like... input("Please specify a stock symbol: ")
+
+
+
+    # see: https://www.alphavantage.co/documentation/#daily (or a different endpoint, as desired)
+    # TODO: assemble the request url to get daily data for the given stock symbol...
+
+    # TODO: use the "requests" package to issue a "GET" request to the specified url, and store the JSON response in a variable...
+
+    # TODO: further parse the JSON response...
+
+    # TODO: traverse the nested response data structure to find the latest closing price and other values of interest...
+    tsd = parsed_response["Time Series (Daily)"]
+
+    dates = list(tsd.keys()) # TODO: sort to ensure it's ordered
+
+    latest_day = dates[0]
+
+    latest_price_usd = tsd[latest_day]["4. close"]
+
+    high_prices = []
+    low_prices = []
+
     for date in dates:
-        daily_prices = tsd[date]
-        writer.writerow({
-            "timestamp": date,
-            "open": daily_prices["1. open"],
-            "high": daily_prices["2. high"],
-            "low": daily_prices["3. low"],
-            "close": daily_prices["4. close"],
-            "volume": daily_prices["5. volume"]
-        })
+        high_price = tsd[date]["2. high"]
+        high_prices.append(float(high_price))
+        low_price = tsd[date]["3. low"]
+        low_prices.append(float(low_price))
 
-#
-# INFO OUTPUTS
-#
+    recent_high = max(high_prices)
+    recent_low = min(low_prices)
 
-# TODO: write response data to a CSV file
 
-# TODO: further revise the example outputs below to reflect real information
-print("-----------------")
-print(f"STOCK SYMBOL: {symbol}")
-print("RUN AT: 11:52pm on June 5th, 2018")
-print("-----------------")
-print(f"LATEST DAY OF AVAILABLE DATA: {last_refreshed}")
-print(f"LATEST DAILY CLOSING PRICE: {to_usd(float(latest_price_usd))}")
-print(f"RECENT HIGH: {to_usd(recent_high)}")
-print(f"RECENT LOW: {to_usd(recent_low)}")
-print("-----------------")
-print("RECOMMENDATION: Buy!")
-print("RECOMMENDATION REASON: Because the latest closing price is within threshold XYZ etc., etc. and this fits within your risk tolerance etc., etc.")
-print("-----------------")
-print("Writing data to CSV")
+    csv_file_path = os.path.join(os.path.dirname(__file__), "..", "data", "prices.csv")
+
+    csv_headers = ["timestamp", "open", "high", "low", "close", "volume"]
+    with open(csv_file_path, "w") as csv_file:
+        writer = csv.DictWriter(csv_file, fieldnames=csv_headers)
+        writer.writeheader()
+        for date in dates:
+            daily_prices = tsd[date]
+            writer.writerow({
+                "timestamp": date,
+                "open": daily_prices["1. open"],
+                "high": daily_prices["2. high"],
+                "low": daily_prices["3. low"],
+                "close": daily_prices["4. close"],
+                "volume": daily_prices["5. volume"]
+            })
+
+    #
+    # INFO OUTPUTS
+    #
+
+    # TODO: write response data to a CSV file
+
+    # TODO: further revise the example outputs below to reflect real information
+    print("-----------------")
+    print(f"STOCK SYMBOL: {symbol}")
+    print("RUN AT: 11:52pm on June 5th, 2018")
+    print("-----------------")
+    print(f"LATEST DAY OF AVAILABLE DATA: {last_refreshed}")
+    print(f"LATEST DAILY CLOSING PRICE: {to_usd(float(latest_price_usd))}")
+    print(f"RECENT HIGH: {to_usd(recent_high)}")
+    print(f"RECENT LOW: {to_usd(recent_low)}")
+    print("-----------------")
+    print("RECOMMENDATION: Buy!")
+    print("RECOMMENDATION REASON: Because the latest closing price is within threshold XYZ etc., etc. and this fits within your risk tolerance etc., etc.")
+    print("-----------------")
+    print("Writing data to CSV")
+
+    query = input("What is the ticker (i.e. MSFT) of the equity you would like information about? (Enter 'Done' if you're finished querying): ")
 
