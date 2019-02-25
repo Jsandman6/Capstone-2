@@ -40,12 +40,19 @@ symbol = "NFLX" # TODO: capture user input, like... input("Please specify a stoc
 # TODO: traverse the nested response data structure to find the latest closing price and other values of interest...
 tsd = parsed_response["Time Series (Daily)"]
 
-dates = list(tsd.keys())
+dates = list(tsd.keys()) # TODO: sort to ensure it's ordered
 
 latest_day = dates[0]
 
 latest_price_usd = tsd[latest_day]["4. close"]
 
+high_prices = []
+
+for date in dates:
+    high_price = tsd[date]["2. high"]
+    high_prices.append(float(high_price))
+
+recent_high = max(high_prices)
 
 #
 # INFO OUTPUTS
@@ -60,7 +67,7 @@ print("RUN AT: 11:52pm on June 5th, 2018")
 print("-----------------")
 print(f"LATEST DAY OF AVAILABLE DATA: {last_refreshed}")
 print(f"LATEST DAILY CLOSING PRICE: {to_usd(float(latest_price_usd))}")
-print("RECENT HIGH: $101,000.00")
+print(f"RECENT HIGH: {to_usd(recent_high)}")
 print("RECENT LOW: $99,000.00")
 print("-----------------")
 print("RECOMMENDATION: Buy!")
