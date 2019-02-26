@@ -52,8 +52,10 @@ while (query != 'Done'):
         print("Sorry! This ticker could not be found. Please try again!")
         exit()
 
+    
 
-
+    
+    last_refreshed_new = datetime.datetime.strptime(last_refreshed, '%Y-%m-%d').strftime('%B %d, %Y')
 
     # see: https://www.alphavantage.co/support/#api-key
     api_key = os.environ.get("ALPHAVANTAGE_API_KEY")
@@ -139,7 +141,7 @@ while (query != 'Done'):
     month_print = month_amend(str(d.month))
     print("RUN AT: " + str(d.hour) + ":" + str(d.minute) + " " + month_print + " " + str(d.day) + ", " + str(d.year))
     print("-----------------")
-    print(f"LATEST DAY OF AVAILABLE DATA: {last_refreshed}")
+    print(f"LATEST DAY OF AVAILABLE DATA: {last_refreshed_new}")
     print(f"LATEST DAILY CLOSING PRICE: {to_usd(float(latest_price_usd))}")
     print(f"RECENT HIGH: {to_usd(recent_high)}")
     print(f"RECENT LOW: {to_usd(recent_low)}")
