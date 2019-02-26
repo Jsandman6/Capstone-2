@@ -17,10 +17,14 @@ load_dotenv() # loads environment variables set in a ".env" file, including the 
 api_key = os.environ.get("ALPHAVANTAGE_API_KEY")
 
 #adapted from https://github.com/ryanbeaudet/shopping-cart/blob/master/shopping_cart.py
-query = input("What is the ticker (i.e. MSFT) of the equity you would like information about? (Enter 'Done' if you're finished querying): ")
+query = input("What is the ticker (i.e. MSFT) of the security you would like information about? (Enter 'done' if you're finished querying): ")
+if( query == 'done'):
+    exit()
+strategy = input("Are you seeking a value or growth security? Please input either 'value' or 'growth'. (Enter 'done' if you would like to exit): ")
 
 #while loop was my own idea
-while (query != 'Done'):
+#adapted logic from https://opentechschool.github.io/python-beginners/en/logical_operators.html
+while (strategy != 'done'):
     #adapted from https://stackoverflow.com/questions/7141208/python-simple-if-or-logic-statement
     if not (0 < len(query) < 7):
         print("Sorry! That ticker is invalid. Please try again!")
@@ -104,25 +108,33 @@ while (query != 'Done'):
                 "volume": daily_prices["5. volume"]
             })
 
-    #
-    # INFO OUTPUTS
-    #
-
-    #adapted on my own from my understanding of value investing
-    #stock prices often dip below their intrinsic value due to volatile variations in market sentiment
-    #the code itself is my own adaptation
-    benchmark_factor = 1.1
-    benchmark = recent_low * benchmark_factor
-    recommendation = ""
-    justification = ""
-    #adapted from https://www.programiz.com/python-programming/if-elif-else
-    if (float(latest_price_usd) < benchmark):
-        recommendation = "Buy"
-        justification = "The stock price is near its recent low and is likely undervalued. This means that risk adjusted returns will likely be higher."
-    elif (float(latest_price_usd) > benchmark):
-        recommendation = "Don't buy"
-        justification = "The stock price is relatively high and there's no reason to think it's undervalued. Risk adjusted returns are unlikely to be high."
-    
+   
+    if (strategy == "value"):
+        #adapted on my own from my understanding of value investing
+        #stock prices often dip below their intrinsic value due to volatile variations in market sentiment
+        #the code itself is my own adaptation
+        benchmark_factor = 1.1
+        benchmark = recent_low * benchmark_factor
+        recommendation = ""
+        justification = ""
+        #adapted from https://www.programiz.com/python-programming/if-elif-else
+        if (float(latest_price_usd) < benchmark):
+            recommendation = "Buy"
+            justification = "The security price is near its historical low and is likely undervalued. This means that risk adjusted returns will likely be higher."
+        elif (float(latest_price_usd) > benchmark):
+            recommendation = "Don't buy"
+            justification = "The security price is relatively high compared to its historical low and there's no reason to think it's undervalued. Risk adjusted returns are unlikely to be high."
+    elif (strategy == "growth"):
+        benchmark_factor = 0.8
+        benchmark = recent_high * 0.8
+        recommendation = ""
+        justification = ""
+        if (float(latest_price_usd) > benchmark):
+            recommendation = "Buy"
+            justification = "The security price is near its historical high, demonstrating growth potential. This may be a growth play."
+        elif (float(latest_price_usd) < benchmark):
+            recommendation = "Don't buy"
+            justification = "The security price is far from its historical high, demonstrating little growth potential. This security is not a growth play."
 
     
     #most of this is adapted from the screencast
@@ -146,5 +158,7 @@ while (query != 'Done'):
     print("Writing data to CSV")
     print("-----------------\n")
 
-    query = input("What is the ticker (i.e. MSFT) of the next equity you would like information about? (Enter 'Done' if you're finished querying): ")
-
+    query = input("What is the ticker (i.e. MSFT) of the next security you would like information about? (Enter 'done' if you're finished querying): ")
+    if (query == 'done'):
+        exit()
+    strategy = input("Are you seeking a value or growth security? Please input either 'value' or 'growth'. (Enter 'done' if you would like to exit): ")
