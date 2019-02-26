@@ -124,7 +124,11 @@ while (strategy != 'done'):
         elif (float(latest_price_usd) > benchmark):
             recommendation = "Don't buy"
             justification = "The security price is relatively high compared to its historical low and there's no reason to think it's undervalued. Risk adjusted returns are unlikely to be high."
+
     elif (strategy == "growth"):
+        #adapted on my own from my understanding of growth investing
+        #growth relies more heavily on long term trends and should be reflected in stedy, consistent price growth over time
+        #the code itself is my own adaptation
         benchmark_factor = 0.8
         benchmark = recent_high * 0.8
         recommendation = ""
