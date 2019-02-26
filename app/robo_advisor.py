@@ -28,7 +28,7 @@ load_dotenv() # loads environment variables set in a ".env" file, including the 
 api_key = os.environ.get("ALPHAVANTAGE_API_KEY")
 
 #adapted from https://github.com/ryanbeaudet/shopping-cart/blob/master/shopping_cart.py
-query = input("What is the ticker (i.e. 'MSFT') of the equity you would like information about? (Enter 'Done' if you're finished querying): ")
+query = input("What is the ticker (i.e. MSFT) of the equity you would like information about? (Enter 'Done' if you're finished querying): ")
 
 #while loop was my own idea
 while (query != 'Done'):
@@ -157,5 +157,5 @@ while (query != 'Done'):
     print("Writing data to CSV")
     print("-----------------\n")
 
-    query = input("What is the ticker (i.e. MSFT) of the equity you would like information about? (Enter 'Done' if you're finished querying): ")
+    query = input("What is the ticker (i.e. MSFT) of the next equity you would like information about? (Enter 'Done' if you're finished querying): ")
 
