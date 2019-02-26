@@ -1,4 +1,5 @@
 #robo_advisor.py
+#adapted from screencast
 from dotenv import load_dotenv
 import json
 import csv
