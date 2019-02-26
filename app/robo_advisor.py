@@ -51,9 +51,8 @@ while (query != 'Done'):
 
     # see: https://www.alphavantage.co/support/#api-key
     api_key = os.environ.get("ALPHAVANTAGE_API_KEY")
-    #print("API KEY: " + api_key)
 
-    
+    #adapted from screencast
     tsd = parsed_response["Time Series (Daily)"]
 
     dates = list(tsd.keys())
@@ -62,7 +61,7 @@ while (query != 'Done'):
     sorted(dates, key=lambda date: datetime.datetime.strptime(date, '%Y-%m-%d'))
 
     
-
+    #adapted from screencast
     latest_day = dates[0]
 
     latest_price_usd = tsd[latest_day]["4. close"]
@@ -70,7 +69,8 @@ while (query != 'Done'):
     high_prices = []
     low_prices = []
 
-    #high prices adapted from screencast but I did low prices on my own
+    #high prices adapted from screencast
+    #I figured the low prices part out on my own, although I believe it closely mirrors the screencast
     for date in dates:
         high_price = tsd[date]["2. high"]
         high_prices.append(float(high_price))
@@ -115,6 +115,7 @@ while (query != 'Done'):
     benchmark = recent_low * benchmark_factor
     recommendation = ""
     justification = ""
+    #adapted from https://www.programiz.com/python-programming/if-elif-else
     if (float(latest_price_usd) < benchmark):
         recommendation = "Buy"
         justification = "The stock price is near its recent low and is likely undervalued. This means that risk adjusted returns will likely be higher."
