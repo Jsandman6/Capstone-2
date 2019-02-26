@@ -11,13 +11,22 @@ def to_usd(price):
     return "${0:,.2f}".format(price)
 
 
+def month_amend(month):
+    month_adjust={'1':'January', '2':'February',
+    '3':'March','4':'April','5':'May','6':'June',
+    '7':'July','8':'August','9':'September','10':'October',
+    '11':'November','12':'December'}
+    new_month = month_adjust[month]
+    return new_month
+
+
 load_dotenv() # loads environment variables set in a ".env" file, including the value of the ALPHAVANTAGE_API_KEY variable
 
 #adapted from screencast
 api_key = os.environ.get("ALPHAVANTAGE_API_KEY")
 
 #adapted from https://github.com/ryanbeaudet/shopping-cart/blob/master/shopping_cart.py
-query = input("What is the ticker (i.e. MSFT) of the equity you would like information about? (Enter 'Done' if you're finished querying): ")
+query = input("What is the ticker (i.e. 'MSFT') of the equity you would like information about? (Enter 'Done' if you're finished querying): ")
 
 #while loop was my own idea
 while (query != 'Done'):
@@ -53,7 +62,7 @@ while (query != 'Done'):
     
     tsd = parsed_response["Time Series (Daily)"]
 
-    dates = list(tsd.keys()) # TODO: sort to ensure it's ordered
+    dates = list(tsd.keys())
 
     #adapted from https://stackoverflow.com/questions/17627531/sort-list-of-date-strings
     sorted(dates, key=lambda date: datetime.datetime.strptime(date, '%Y-%m-%d'))
@@ -61,8 +70,6 @@ while (query != 'Done'):
     
 
     latest_day = dates[0]
-    
-    
 
     latest_price_usd = tsd[latest_day]["4. close"]
 
@@ -129,7 +136,8 @@ while (query != 'Done'):
     print(f"STOCK SYMBOL: {query}")
     #adapted from https://github.com/ryanbeaudet/shopping-cart/blob/master/shopping_cart.py
     d = datetime.datetime.now()
-    print("RUN AT:" + str(d.year) + "-" + str(d.month) + "-" + str(d.day) + " " + str(d.hour) + ":" + str(d.minute) + ":" + str(d.second))
+    month_print = month_amend(str(d.month))
+    print("RUN AT: " + str(d.hour) + ":" + str(d.minute) + " " + month_print + " " + str(d.day) + ", " + str(d.year))
     print("-----------------")
     print(f"LATEST DAY OF AVAILABLE DATA: {last_refreshed}")
     print(f"LATEST DAILY CLOSING PRICE: {to_usd(float(latest_price_usd))}")
