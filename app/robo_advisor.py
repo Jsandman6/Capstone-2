@@ -11,17 +11,6 @@ import datetime
 def to_usd(price):
     return "${0:,.2f}".format(price)
 
-#adapted from https://github.com/ryanbeaudet/Exec-Dashboard-Project/blob/master/monthly_sales.py
-#but thank you to Caroline Feeney for originally giving me general guidance on this function!
-def month_amend(month):
-    month_adjust={'1':'January', '2':'February',
-    '3':'March','4':'April','5':'May','6':'June',
-    '7':'July','8':'August','9':'September','10':'October',
-    '11':'November','12':'December'}
-    new_month = month_adjust[month]
-    return new_month
-
-
 load_dotenv() # loads environment variables set in a ".env" file, including the value of the ALPHAVANTAGE_API_KEY variable
 
 #adapted from screencast
@@ -141,9 +130,8 @@ while (query != 'Done'):
     print(f"STOCK SYMBOL: {query}")
     #adapted from https://github.com/ryanbeaudet/shopping-cart/blob/master/shopping_cart.py
     d = datetime.datetime.now()
-    month_print = month_amend(str(d.month))
-    #adapted from https://github.com/ryanbeaudet/shopping-cart/blob/master/shopping_cart.py
-    print("RUN AT: " + str(d.hour) + ":" + str(d.minute) + " " + month_print + " " + str(d.day) + ", " + str(d.year))
+    #adapted from https://www.guru99.com/date-time-and-datetime-classes-in-python.html#3
+    print("RUN AT: " + str(d.strftime('%I:%M%p %B %d, %Y')))
     print("-----------------")
     print(f"LATEST DAY OF AVAILABLE DATA: {last_refreshed_new}")
     print(f"LATEST DAILY CLOSING PRICE: {to_usd(float(latest_price_usd))}")
