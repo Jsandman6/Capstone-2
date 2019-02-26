@@ -10,7 +10,8 @@ import datetime
 def to_usd(price):
     return "${0:,.2f}".format(price)
 
-
+#adapted from https://github.com/ryanbeaudet/Exec-Dashboard-Project/blob/master/monthly_sales.py
+#but thank you to Caroline Feeney for originally giving me general guidance on this function!
 def month_amend(month):
     month_adjust={'1':'January', '2':'February',
     '3':'March','4':'April','5':'May','6':'June',
@@ -54,7 +55,8 @@ while (query != 'Done'):
 
     
 
-    
+    #adapted from https://stackoverflow.com/questions/14524322/how-to-convert-a-date-string-to-different-format
+    # as well as https://stackoverflow.com/questions/6557553/get-month-name-from-number
     last_refreshed_new = datetime.datetime.strptime(last_refreshed, '%Y-%m-%d').strftime('%B %d, %Y')
 
     # see: https://www.alphavantage.co/support/#api-key
@@ -139,6 +141,7 @@ while (query != 'Done'):
     #adapted from https://github.com/ryanbeaudet/shopping-cart/blob/master/shopping_cart.py
     d = datetime.datetime.now()
     month_print = month_amend(str(d.month))
+    #adapted from https://github.com/ryanbeaudet/shopping-cart/blob/master/shopping_cart.py
     print("RUN AT: " + str(d.hour) + ":" + str(d.minute) + " " + month_print + " " + str(d.day) + ", " + str(d.year))
     print("-----------------")
     print(f"LATEST DAY OF AVAILABLE DATA: {last_refreshed_new}")
