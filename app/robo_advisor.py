@@ -45,11 +45,9 @@ while (query != 'done'):
         print("Sorry! This ticker could not be found. Please try again!")
         exit()
 
-    
-
     #adapted from https://stackoverflow.com/questions/14524322/how-to-convert-a-date-string-to-different-format
     # as well as https://stackoverflow.com/questions/6557553/get-month-name-from-number
-    last_refreshed_new = datetime.datetime.strptime(last_refreshed, '%Y-%m-%d').strftime('%B %d, %Y')
+    last_refreshed_new = datetime.datetime.strptime(last_refreshed, '%Y-%m-%d %H:%M:%S').strftime('%B %d, %Y')
 
     # see: https://www.alphavantage.co/support/#api-key
     api_key = os.environ.get("ALPHAVANTAGE_API_KEY")
