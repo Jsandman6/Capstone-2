@@ -19,6 +19,36 @@ def get_response(ticker):
 
     return parsed_response
 
+def transform_response(parsed_response):
+    
+    dates = parsed_response["Times Series (Daily)"]
+
+    rows = []
+
+    for date, daily_prices in dates.items():
+        row = {
+            "timestamp": date,
+            "open": daily_prices["1. open"],
+            "high": daily_prices["2. high"],
+            "low": daily_prices["3. low"],
+            "close": daily_prices["4. close"],
+            "volume": daily_prices["5. volume"]
+        }
+        rows.append(row)
+    
+    return rows
+
+
+def write_to_csv(rows, csv_filepath):
+    #adapted from https://realpython.com/python-csv/
+    with open(csv_file_path, "w") as csv_file:
+        writer = csv.DictWriter(csv_file, fieldnames=csv_headers)
+        writer.writeheader()
+        for r in rows:
+            writer.writerow(r)
+
+    
+
 load_dotenv() # loads environment variables set in a ".env" file, including the value of the ALPHAVANTAGE_API_KEY variable
 
 #adapted from screencast
@@ -100,17 +130,17 @@ while (query != 'done'):
         writer = csv.DictWriter(csv_file, fieldnames=csv_headers)
         writer.writeheader()
 
-        #adapted from screencast
-        for date in dates:
-            daily_prices = tsd[date]
-            writer.writerow({
-                "timestamp": date,
-                "open": daily_prices["1. open"],
-                "high": daily_prices["2. high"],
-                "low": daily_prices["3. low"],
-                "close": daily_prices["4. close"],
-                "volume": daily_prices["5. volume"]
-            })
+    #adapted from screencast
+    for date in dates:
+        daily_prices = tsd[date]
+        writer.writerow({
+            "timestamp": date,
+            "open": daily_prices["1. open"],
+            "high": daily_prices["2. high"],
+            "low": daily_prices["3. low"],
+            "close": daily_prices["4. close"],
+            "volume": daily_prices["5. volume"]
+        })
 
    
     
