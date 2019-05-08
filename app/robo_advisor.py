@@ -11,6 +11,14 @@ import datetime
 def to_usd(price):
     return "${0:,.2f}".format(price)
 
+def get_response(ticker):
+    #adapted from the screencast
+    request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + str(ticker) + "&apikey=api_key"
+    response = requests.get(request_url)
+    parsed_response = json.loads(response.text)
+
+    return parsed_response
+
 load_dotenv() # loads environment variables set in a ".env" file, including the value of the ALPHAVANTAGE_API_KEY variable
 
 #adapted from screencast
@@ -145,4 +153,3 @@ while (query != 'done'):
     print("-----------------\n")
 
     query = input("What is the ticker (i.e. MSFT) of the next security you would like information about? (Enter 'done' if you're finished querying): ")
-    
