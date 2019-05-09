@@ -33,7 +33,7 @@ def transform_response(parsed_response):
             "high": daily_prices["2. high"],
             "low": daily_prices["3. low"],
             "close": daily_prices["4. close"],
-            "volume": daily_prices["5. volume"]
+            "volume": daily_prices["6. volume"]
         }
         rows.append(row)
     
