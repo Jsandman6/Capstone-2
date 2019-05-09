@@ -11,10 +11,17 @@ def test_to_usd():
 
     assert to_usd(1000000) == "$1,000,000.00"
 
+def test_compile_url():
+    correct_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=MSFT&apikey=api_key"
+    ticker = "MSFT"
+
+    assert compile_url(ticker) == correct_url
+
 def test_get_response():
     ticker = "MSFT"
 
-    parsed_response = get_response(ticker)
+    request_url = compile_url(ticker)
+    parsed_response = get_response(request_url)
 
     assert isinstance(parsed_response, dict)
     assert "Time Series (Daily)" in parsed_response.keys()
@@ -38,40 +45,28 @@ def test_transform_response():
             "2. high": "126.3700",
             "3. low": "124.7500",
             "4. close": "125.5100",
-            "5. adjusted close": "125.5100",
-            "6. volume": "21077406",
-            "7. dividend amount": "0.0000",
-            "8. split coefficient": "1.0000"
+            "5. volume": "21077406"
         },
         "2019-05-07": {
             "1. open": "126.4600",
             "2. high": "127.1800",
             "3. low": "124.2200",
             "4. close": "125.5200",
-            "5. adjusted close": "125.5200",
-            "6. volume": "35167000",
-            "7. dividend amount": "0.0000",
-            "8. split coefficient": "1.0000"
+            "5. volume": "35167000"
         },
         "2019-05-06": {
             "1. open": "126.3900",
             "2. high": "128.5600",
             "3. low": "126.1100",
             "4. close": "128.1500",
-            "5. adjusted close": "128.1500",
-            "6. volume": "24239464",
-            "7. dividend amount": "0.0000",
-            "8. split coefficient": "1.0000"
+            "5. volume": "24239464"
         },
         "2019-05-03": {
             "1. open": "127.3600",
             "2. high": "129.4300",
             "3. low": "127.2500",
             "4. close": "128.9000",
-            "5. adjusted close": "128.9000",
-            "6. volume": "24911126",
-            "7. dividend amount": "0.0000",
-            "8. split coefficient": "1.0000"
+            "5. volume": "24911126"
         }
     }
     }

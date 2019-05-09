@@ -11,14 +11,19 @@ import datetime
 def to_usd(price):
     return "${0:,.2f}".format(price)
 
-def get_response(ticker):
-    #adapted from the screencast
+def compile_url(ticker):
     request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + str(ticker) + "&apikey=api_key"
+    return request_url
+
+def get_response(request_url):
+    #adapted from the screencast
     response = requests.get(request_url)
     print(response)
     parsed_response = json.loads(response.text)
 
     return parsed_response
+
+
 
 def transform_response(parsed_response):
     #print(parsed_response)
@@ -33,7 +38,7 @@ def transform_response(parsed_response):
             "high": daily_prices["2. high"],
             "low": daily_prices["3. low"],
             "close": daily_prices["4. close"],
-            "volume": daily_prices["6. volume"]
+            "volume": daily_prices["5. volume"]
         }
         rows.append(row)
     
@@ -78,14 +83,9 @@ if __name__ == "__main__":
             print("Sorry! Tickers do not contains digits. Please try again!")
             exit()
 
-        '''
-        #adapted from the screencast
-        request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + str(query) + "&apikey=api_key"
-        response = requests.get(request_url)
-        parsed_response = json.loads(response.text)
-        '''
+        request_url = compile_url(query)
 
-        parsed_response = get_response(query)
+        parsed_response = get_response(request_url)
 
         transformed_response = transform_response(parsed_response)
 
@@ -93,13 +93,14 @@ if __name__ == "__main__":
         #I also used knowledge from other CS courses to implement an exception
         try:
             last_refreshed = parsed_response["Meta Data"]["3. Last Refreshed"]
+            print(last_refreshed)
         except KeyError:
             print("Sorry! This ticker could not be found. Please try again!")
             exit()
 
         #adapted from https://stackoverflow.com/questions/14524322/how-to-convert-a-date-string-to-different-format
         # as well as https://stackoverflow.com/questions/6557553/get-month-name-from-number
-        last_refreshed_new = datetime.datetime.strptime(last_refreshed, '%Y-%m-%d') #%H:%M:%S') #.strftime('%B %d, %Y')
+        last_refreshed_new = datetime.datetime.strptime(last_refreshed, '%Y-%m-%d').strftime('%B %d, %Y')
 
         # see: https://www.alphavantage.co/support/#api-key
         api_key = os.environ.get("ALPHAVANTAGE_API_KEY")
