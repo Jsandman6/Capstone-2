@@ -11,10 +11,17 @@ def test_to_usd():
 
     assert to_usd(1000000) == "$1,000,000.00"
 
+def test_compile_url():
+    correct_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=MSFT&apikey=api_key"
+    ticker = "MSFT"
+
+    assert compile_url(ticker) == correct_url
+
 def test_get_response():
     ticker = "MSFT"
 
-    parsed_response = get_response(ticker)
+    request_url = compile_url(ticker)
+    parsed_response = get_response(request_url)
 
     assert isinstance(parsed_response, dict)
     assert "Time Series (Daily)" in parsed_response.keys()

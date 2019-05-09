@@ -11,14 +11,19 @@ import datetime
 def to_usd(price):
     return "${0:,.2f}".format(price)
 
-def get_response(ticker):
-    #adapted from the screencast
+def compile_url(ticker):
     request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + str(ticker) + "&apikey=api_key"
+    return request_url
+
+def get_response(request_url):
+    #adapted from the screencast
     response = requests.get(request_url)
     print(response)
     parsed_response = json.loads(response.text)
 
     return parsed_response
+
+
 
 def transform_response(parsed_response):
     #print(parsed_response)
@@ -78,14 +83,9 @@ if __name__ == "__main__":
             print("Sorry! Tickers do not contains digits. Please try again!")
             exit()
 
-        '''
-        #adapted from the screencast
-        request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + str(query) + "&apikey=api_key"
-        response = requests.get(request_url)
-        parsed_response = json.loads(response.text)
-        '''
+        request_url = compile_url(query)
 
-        parsed_response = get_response(query)
+        parsed_response = get_response(request_url)
 
         transformed_response = transform_response(parsed_response)
 
