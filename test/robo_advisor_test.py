@@ -1,5 +1,7 @@
 from app.robo_advisor import *
 
+
+#adapted from https://github.com/s2t2/shopping-cart-screencast/blob/testing/shopping_cart_test.py
 def test_to_usd():
     assert to_usd(7) == "$7.00"
 
@@ -17,6 +19,7 @@ def test_compile_url():
 
     assert compile_url(ticker) == correct_url
 
+#adapted from https://github.com/s2t2/robo-advisor-screencast/blob/v3-testing/test/advisor_test.py
 def test_get_response():
     ticker = "MSFT"
 
@@ -28,6 +31,8 @@ def test_get_response():
     assert "Meta Data" in parsed_response.keys()
     assert parsed_response["Meta Data"]["2. Symbol"] == ticker
 
+
+#adapted from https://github.com/s2t2/robo-advisor-screencast/blob/v3-testing/test/advisor_test.py
 def test_transform_response():
 
 
