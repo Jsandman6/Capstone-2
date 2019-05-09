@@ -11,10 +11,14 @@ import datetime
 def to_usd(price):
     return "${0:,.2f}".format(price)
 
+
+
 def compile_url(ticker):
-    request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + str(ticker) + "&apikey=api_key"
+    request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + str(ticker) + "&apikey=" + str(api_key)
     return request_url
 
+
+#adapted from https://github.com/s2t2/robo-advisor-screencast/blob/v3-testing/app/robo_advisor.py
 def get_response(request_url):
     #adapted from the screencast
     response = requests.get(request_url)
@@ -24,9 +28,8 @@ def get_response(request_url):
     return parsed_response
 
 
-
+#adapted from https://github.com/s2t2/robo-advisor-screencast/blob/v3-testing/app/robo_advisor.py
 def transform_response(parsed_response):
-    #print(parsed_response)
     dates = parsed_response["Time Series (Daily)"]
 
     rows = []
@@ -44,7 +47,7 @@ def transform_response(parsed_response):
     
     return rows
 
-
+#adapted from https://github.com/s2t2/robo-advisor-screencast/blob/v3-testing/app/robo_advisor.py
 def write_to_csv(rows, csv_filepath):
 
     csv_headers = ["timestamp", "open", "high", "low", "close", "volume"]
@@ -100,7 +103,7 @@ if __name__ == "__main__":
 
         #adapted from https://stackoverflow.com/questions/14524322/how-to-convert-a-date-string-to-different-format
         # as well as https://stackoverflow.com/questions/6557553/get-month-name-from-number
-        last_refreshed_new = datetime.datetime.strptime(last_refreshed, '%Y-%m-%d').strftime('%B %d, %Y')
+        last_refreshed_new = datetime.datetime.strptime(last_refreshed, '%Y-%m-%d %H:%M:%S').strftime('%B %d, %Y')
 
         # see: https://www.alphavantage.co/support/#api-key
         api_key = os.environ.get("ALPHAVANTAGE_API_KEY")

@@ -14,7 +14,7 @@ def test_to_usd():
     assert to_usd(1000000) == "$1,000,000.00"
 
 def test_compile_url():
-    correct_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=MSFT&apikey=api_key"
+    correct_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=MSFT&apikey=" + str(api_key)
     ticker = "MSFT"
 
     assert compile_url(ticker) == correct_url

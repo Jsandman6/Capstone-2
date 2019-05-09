@@ -4,6 +4,8 @@ A starter repository for the ["Robo Advisor" project](https://github.com/prof-ro
 
 Issues requests to the [AlphaVantage Stock Market API](https://www.alphavantage.co/) in order to provide automated stock or cryptocurrency trading recommendations.
 
+The basic purpose of this program is to track basic stock information at user-designated intervals. The user can get access to highs, lows, closes, etc. for the stocks of their choice. They can also write to a CSV all this relevant information for a number of days.
+
 ## Prerequisites
 
   + Anaconda 3.7
@@ -12,7 +14,7 @@ Issues requests to the [AlphaVantage Stock Market API](https://www.alphavantage.
 
 ## Installation
 
-Fork this [starter project repository](https://github.com/prof-rossetti/stocks-app-starter-py) under your own control, then clone or download the resulting repository onto your computer. Then navigate there from the command line:
+Fork this [final repository](https://github.com/ryanbeaudet/robo-advisor-project) under your own control, then clone or download the resulting repository onto your computer. Then navigate there from the command line:
 
 ```sh
 cd robo-advisor-starter-py
@@ -39,6 +41,8 @@ Run the recommendation script:
 ```py
 python app/robo_advisor.py
 ```
+
+The rest of the process is fairly simple. Just enter in the name of the stock for which you would like information, and then summary data will be printed and comprehensive data will be written to a CSV file.
 
 ## Testing
 
