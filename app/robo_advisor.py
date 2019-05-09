@@ -15,13 +15,14 @@ def get_response(ticker):
     #adapted from the screencast
     request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + str(ticker) + "&apikey=api_key"
     response = requests.get(request_url)
+    print(response)
     parsed_response = json.loads(response.text)
 
     return parsed_response
 
 def transform_response(parsed_response):
-    
-    dates = parsed_response["Times Series (Daily)"]
+    #print(parsed_response)
+    dates = parsed_response["Time Series (Daily)"]
 
     rows = []
 
@@ -58,6 +59,7 @@ load_dotenv() # loads environment variables set in a ".env" file, including the 
 
 #adapted from screencast
 api_key = os.environ.get("ALPHAVANTAGE_API_KEY")
+
 
 if __name__ == "__main__":
     #adapted from https://github.com/ryanbeaudet/shopping-cart/blob/master/shopping_cart.py
@@ -97,7 +99,7 @@ if __name__ == "__main__":
 
         #adapted from https://stackoverflow.com/questions/14524322/how-to-convert-a-date-string-to-different-format
         # as well as https://stackoverflow.com/questions/6557553/get-month-name-from-number
-        last_refreshed_new = datetime.datetime.strptime(last_refreshed, '%Y-%m-%d %H:%M:%S').strftime('%B %d, %Y')
+        last_refreshed_new = datetime.datetime.strptime(last_refreshed, '%Y-%m-%d') #%H:%M:%S') #.strftime('%B %d, %Y')
 
         # see: https://www.alphavantage.co/support/#api-key
         api_key = os.environ.get("ALPHAVANTAGE_API_KEY")
@@ -135,7 +137,7 @@ if __name__ == "__main__":
         #adapted from screencast
         csv_file_path = os.path.join(os.path.dirname(__file__), "..", "data", str(query) + " prices.csv")
 
-        
+        write_to_csv(transformed_response, csv_file_path)
 
 
         
