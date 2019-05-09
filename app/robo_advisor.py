@@ -14,7 +14,7 @@ def to_usd(price):
 
 
 def compile_url(ticker):
-    request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + str(ticker) + "&apikey=api_key"
+    request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + str(ticker) + "&apikey=" + str(api_key)
     return request_url
 
 
